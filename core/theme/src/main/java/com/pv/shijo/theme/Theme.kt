@@ -1,4 +1,4 @@
-package com.pv.shijo.articles.ui.theme
+package com.pv.shijo.theme
 
 import android.app.Activity
 import android.os.Build

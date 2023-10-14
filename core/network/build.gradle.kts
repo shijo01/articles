@@ -50,6 +50,7 @@ dependencies {
 
     implementation(libs.bundles.hilt)
     implementation(libs.bundles.retrofit)
+    kapt(libs.bundles.hitlCompiler)
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)

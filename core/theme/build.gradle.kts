@@ -2,12 +2,10 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    kotlin("kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.pv.shijo.articles.ui"
+    namespace = "com.pv.shijo.theme"
     compileSdk = 33
 
     defaultConfig {
@@ -54,20 +52,21 @@ android {
 
 dependencies {
 
-    implementation(projects.core.entity)
-    implementation(projects.core.theme)
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.material)
-    implementation(libs.bundles.coil)
-    implementation(libs.bundles.hilt)
-    kapt(libs.bundles.hitlCompiler)
-//todo
-    implementation("androidx.compose.material3:material3:1.2.0-alpha09")
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.0-alpha09")
     implementation(libs.core.ktx)
-    implementation(libs.appcompat)
-    // implementation(libs.androidx.material3)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.bundles.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
+    implementation("androidx.compose.material3:material3:1.2.0-alpha09")
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.0-alpha09")
 }

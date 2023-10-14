@@ -2,12 +2,10 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    kotlin("kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.pv.shijo.articles.ui"
+    namespace = "com.pv.shijo.core.entity"
     compileSdk = 33
 
     defaultConfig {
@@ -44,30 +42,8 @@ android {
             "-opt-in=kotlinx.coroutines.FlowPreview",
         )
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
-    }
 }
 
 dependencies {
 
-    implementation(projects.core.entity)
-    implementation(projects.core.theme)
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.material)
-    implementation(libs.bundles.coil)
-    implementation(libs.bundles.hilt)
-    kapt(libs.bundles.hitlCompiler)
-//todo
-    implementation("androidx.compose.material3:material3:1.2.0-alpha09")
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.0-alpha09")
-    implementation(libs.core.ktx)
-    implementation(libs.appcompat)
-    // implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }

@@ -51,6 +51,7 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.features.articles.domain)
     implementation(libs.bundles.hilt)
+    kapt(libs.bundles.hitlCompiler)
 
     implementation(libs.core.ktx)
 
