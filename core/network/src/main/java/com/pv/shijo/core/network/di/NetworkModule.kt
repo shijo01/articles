@@ -1,6 +1,7 @@
 package com.pv.shijo.core.network.di
 
 import androidx.multidex.BuildConfig
+import com.pv.shijo.core.network.ArticleApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,4 +43,6 @@ object NetworkModule {
             .client(okHttpClient)
             .build()
 
+    @Provides
+    fun provideArticleApi(retrofit: Retrofit): ArticleApi = retrofit.create(ArticleApi::class.java)
 }

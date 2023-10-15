@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.pv.shijo.articles.domain"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.entity)
     implementation(libs.bundles.hilt)
     kapt(libs.bundles.hitlCompiler)
     implementation(libs.core.ktx)

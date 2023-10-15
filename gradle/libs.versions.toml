@@ -1,5 +1,6 @@
 [versions]
 agp = "8.1.0"
+navigationCompose = "2.7.4"
 org-jetbrains-kotlin-android = "1.8.20"
 core-ktx = "1.9.0"
 junit = "4.13.2"
@@ -19,6 +20,7 @@ org-jetbrains-kotlin-jvm = "1.8.20"
 material3Version = "1.2.0-alpha09"
 
 [libraries]
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }

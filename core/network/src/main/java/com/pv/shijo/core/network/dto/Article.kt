@@ -2,6 +2,7 @@ package com.pv.shijo.core.network.dto
 
 
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class Article(
     @SerializedName("articleStatus")
@@ -15,7 +16,7 @@ data class Article(
     @SerializedName("createdBy")
     val createdBy: String?,
     @SerializedName("createdDate")
-    val createdDate: String?,
+    val createdDate: Date?,
     @SerializedName("createdOn")
     val createdOn: String?,
     @SerializedName("fullText")

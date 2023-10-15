@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.pv.shijo.articles.ui"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
@@ -56,10 +56,12 @@ dependencies {
 
     implementation(projects.core.entity)
     implementation(projects.core.theme)
+    implementation(projects.features.articles.domain)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.material)
     implementation(libs.bundles.coil)
     implementation(libs.bundles.hilt)
+
     kapt(libs.bundles.hitlCompiler)
 //todo
     implementation("androidx.compose.material3:material3:1.2.0-alpha09")

@@ -2,16 +2,18 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.pv.shijo.articles"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.pv.shijo.articles"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -64,6 +66,16 @@ android {
 
 dependencies {
 
+    implementation(projects.core.theme)
+    implementation(projects.core.entity)
+    implementation(projects.core.network)
+    implementation(projects.features.articles.ui)
+    implementation(projects.features.articles.domain)
+    implementation(projects.features.articles.data)
+    implementation(libs.bundles.hilt)
+    kapt(libs.bundles.hitlCompiler)
+
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -79,4 +91,6 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    implementation(libs.androidx.navigation.compose)
 }

@@ -3,44 +3,57 @@ package com.pv.shijo.articles
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.pv.shijo.articles.ui.ArticleDetailRoute
+import com.pv.shijo.articles.ui.ArticleListRoute
 import com.pv.shijo.theme.ArticlesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val articleViewModel by viewModels<ArticleViewModel>()
         setContent {
-            com.pv.shijo.theme.ArticlesTheme {
+            ArticlesTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.surfaceDim
                 ) {
-                    Greeting("Android")
+
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "article") {
+                        composable("article") {
+                            ArticleListRoute(
+                                modifier = Modifier.fillMaxSize(),
+                                articleViewModel = articleViewModel,
+                                navigateToArticleDetail = {
+                                    navController.navigate("article/${it.id}")
+                                }
+                            )
+                        }
+                        composable("article/{articleId}") { navBackStackEntry ->
+                            ArticleDetailRoute(
+                                articleViewModel = articleViewModel,
+                                articleId = navBackStackEntry.arguments?.getString("articleId", "")
+                                    ?: "",
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+                    }
+
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    com.pv.shijo.theme.ArticlesTheme {
-        Greeting("Android")
     }
 }

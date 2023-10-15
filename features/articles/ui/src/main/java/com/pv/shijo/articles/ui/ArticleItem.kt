@@ -47,7 +47,7 @@ import com.pv.shijo.entity.Article
 import com.pv.shijo.theme.ArticlesTheme
 
 @Composable
-fun ArticleCardExpanded(
+fun ArticleCard(
     modifier: Modifier = Modifier,
     article: Article,
     onClick: () -> Unit,
@@ -63,7 +63,9 @@ fun ArticleCardExpanded(
     ) {
         Column {
             Row {
-                ArticleHeaderImage(article.imageUrl)
+                ArticleHeaderImage(
+                    article.imageUrl
+                )
             }
             Box(
                 modifier = Modifier.padding(16.dp),
@@ -196,7 +198,7 @@ private fun ExpandedArticlePreview(
     ) {
         ArticlesTheme {
             Surface {
-                ArticleCardExpanded(
+                ArticleCard(
                     modifier = Modifier.wrapContentSize(),
                     article = userArticles[0],
                     onClick = {}
