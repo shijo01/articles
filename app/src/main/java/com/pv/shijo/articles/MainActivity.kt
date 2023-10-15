@@ -7,7 +7,9 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,38 +24,36 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val articleViewModel by viewModels<ArticleViewModel>()
         setContent {
-            ArticlesTheme {
-                // A surface container using the 'background' color from the theme
+            ArticlesTheme(
+                androidTheme = false,
+                disableDynamicTheming = false,
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.surfaceDim
+                    color = MaterialTheme.colorScheme.surfaceColorAtElevation(12.dp)
                 ) {
-
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "article") {
                         composable("article") {
-                            ArticleListRoute(
-                                modifier = Modifier.fillMaxSize(),
+                            ArticleListRoute(modifier = Modifier.fillMaxSize(),
                                 articleViewModel = articleViewModel,
                                 navigateToArticleDetail = {
                                     navController.navigate("article/${it.id}")
-                                }
-                            )
+                                })
                         }
                         composable("article/{articleId}") { navBackStackEntry ->
-                            ArticleDetailRoute(
-                                articleViewModel = articleViewModel,
-                                articleId = navBackStackEntry.arguments?.getString("articleId", "")
-                                    ?: "",
+                            ArticleDetailRoute(articleViewModel = articleViewModel,
+                                articleId = navBackStackEntry.arguments?.getString(
+                                    "articleId", ""
+                                ) ?: "",
                                 onBackClick = {
                                     navController.popBackStack()
-                                }
-                            )
+                                })
                         }
                     }
-
                 }
             }
         }
     }
 }
+

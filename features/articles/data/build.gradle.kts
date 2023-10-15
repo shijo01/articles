@@ -60,4 +60,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
 
+    val pagingVersion = "3.2.0-alpha06"
+    implementation ("androidx.paging:paging-runtime:$pagingVersion")
+
 }

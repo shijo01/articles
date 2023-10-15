@@ -9,24 +9,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.pv.shijo.articles.ArticleViewModel
+import com.pv.shijo.articles.ui.components.ErrorMessage
+import com.pv.shijo.articles.ui.components.LoadingNextPageItem
+import com.pv.shijo.articles.ui.components.PageLoader
 import com.pv.shijo.entity.Article
 import com.pv.shijo.theme.ArticlesTheme
-
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun ArticleListRoute(
@@ -35,90 +36,95 @@ fun ArticleListRoute(
     navigateToArticleDetail: (Article) -> Unit
 ) {
     LaunchedEffect(key1 = true, block = {
-        articleViewModel.onFetchPage(2)
+        articleViewModel.onFetchPage()
     })
-    val articleListUiState by articleViewModel.articleListUiState.collectAsState()
+    val articlePagingItems: LazyPagingItems<Article> =
+        articleViewModel.articleState.collectAsLazyPagingItems()
 
-    ArticleScreen(articleListUiState = articleListUiState, onArticleClick = {
-        navigateToArticleDetail(it)
-    })
+    ArticleScreen(
+        articlePagingItems = articlePagingItems,
+        onArticleClick = {
+            navigateToArticleDetail(it)
+        })
 }
 
 @Composable
 internal fun ArticleScreen(
     modifier: Modifier = Modifier,
-    articleListUiState: ArticleListUiState,
+    articlePagingItems: LazyPagingItems<Article>,
     onArticleClick: (Article) -> Unit
 ) {
     val state = rememberLazyStaggeredGridState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-
-        when (articleListUiState) {
-            ArticleListUiState.Error -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.Center)
-                ) {
-                    Text(text = "Error")
-                }
-            }
-
-            ArticleListUiState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.Center)
-                ) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-            }
-
-            is ArticleListUiState.Success -> {
-                LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Adaptive(300.dp),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalItemSpacing = 24.dp,
-                    state = state
-                ) {
-                    articleList(
-                        articleListUiState = articleListUiState,
-                        onArticleClick = onArticleClick
-                    )
-                }
-            }
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(300.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalItemSpacing = 24.dp,
+            state = state
+        ) {
+            articleList(
+                articlePagingItems = articlePagingItems,
+                onArticleClick = onArticleClick
+            )
         }
     }
 }
+
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyStaggeredGridScope.articleList(
-    articleListUiState: ArticleListUiState,
-    onArticleClick: (Article) -> Unit
+    onArticleClick: (Article) -> Unit,
+    articlePagingItems: LazyPagingItems<Article>
 ) {
-    when (articleListUiState) {
-        ArticleListUiState.Error -> Unit
-        ArticleListUiState.Loading -> Unit
-        is ArticleListUiState.Success -> {
-            items(
-                items = articleListUiState.articles,
-                key = { it.id },
-                contentType = { "articleItem" },
-            ) { article ->
-                ArticleCard(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .animateItemPlacement(),
-                    article = article
-                ) {
-                    onArticleClick(article)
+    items(articlePagingItems.itemCount) { index ->
+        articlePagingItems[index]?.let { article: Article ->
+            ArticleCard(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .animateItemPlacement(),
+                article = article,
+            ) {
+                onArticleClick(article)
+            }
+        }
+    }
+
+    articlePagingItems.apply {
+        when {
+            loadState.refresh is LoadState.Loading -> {
+                item { PageLoader(modifier = Modifier.fillMaxSize()) }
+            }
+
+            loadState.refresh is LoadState.Error -> {
+                val error = articlePagingItems.loadState.refresh as LoadState.Error
+                item {
+                    ErrorMessage(
+                        modifier = Modifier.fillMaxSize(),
+                        message = error.error.localizedMessage!!,
+                        onClickRetry = { retry() })
+                }
+            }
+
+            loadState.append is LoadState.Loading -> {
+                item { LoadingNextPageItem(modifier = Modifier) }
+            }
+
+            loadState.append is LoadState.Error -> {
+                val error = articlePagingItems.loadState.append as LoadState.Error
+                item {
+                    ErrorMessage(
+                        modifier = Modifier,
+                        message = error.error.localizedMessage!!,
+                        onClickRetry = { retry() })
                 }
             }
         }
     }
 }
+
+
 
 @Preview
 @Preview(device = Devices.TABLET)
@@ -128,14 +134,16 @@ private fun ArticleListPreview(
     articles: List<Article>,
 ) {
     ArticlesTheme {
+        val articlePagingItems = flowOf(PagingData.from(articles)).collectAsLazyPagingItems()
         LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(300.dp)) {
             articleList(
-                articleListUiState = ArticleListUiState.Success(articles),
-                onArticleClick = {}
+                onArticleClick = {},
+                articlePagingItems = articlePagingItems
             )
         }
     }
 }
+
 
 @Preview
 @Composable
@@ -143,10 +151,12 @@ private fun ArticleLoadingPreview(
     @PreviewParameter(ArticlePreviewParameterProvider::class)
     articles: List<Article>,
 ) {
+    val articlePagingItems = flowOf(PagingData.empty<Article>()).collectAsLazyPagingItems()
     ArticlesTheme {
         ArticleScreen(
-            articleListUiState = ArticleListUiState.Loading,
-            onArticleClick = {}
+            onArticleClick = {},
+            articlePagingItems = articlePagingItems
         )
     }
 }
+

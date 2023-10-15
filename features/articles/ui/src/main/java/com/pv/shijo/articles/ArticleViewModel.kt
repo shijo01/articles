@@ -3,16 +3,14 @@ package com.pv.shijo.articles
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pv.shijo.articles.ui.ArticleListUiState
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.pv.shijo.articles.usecases.GetArticleUseCase
-import com.pv.shijo.entity.DataState
+import com.pv.shijo.entity.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,33 +20,22 @@ class ArticleViewModel @Inject constructor(
     private val getArticle: GetArticleUseCase
 ) : ViewModel() {
 
-    private val _articleListUiState =
-        MutableStateFlow<ArticleListUiState>(ArticleListUiState.Loading)
+    private val _articleState: MutableStateFlow<PagingData<Article>> =
+        MutableStateFlow(value = PagingData.empty())
+    val articleState: MutableStateFlow<PagingData<Article>> get() = _articleState
 
-    val articleListUiState = _articleListUiState.asStateFlow()
-
-    fun onFetchPage(page: Int) {
+    suspend fun onFetchPage() {
         viewModelScope.launch(exceptionHandler) {
-            getArticle.invoke(page).map { articleResponse ->
-                when (articleResponse) {
-                    is DataState.Data -> {
-                        _articleListUiState.update {
-                            ArticleListUiState.Success(articleResponse.data.articles)
-                        }
-                    }
-
-                    is DataState.Loading -> {
-                        _articleListUiState.update {
-                            ArticleListUiState.Loading
-                        }
-                    }
+            getArticle.invoke()
+                .distinctUntilChanged()
+                .cachedIn(this)
+                .collect { pagingData ->
+                    _articleState.value = pagingData
                 }
-            }.launchIn(this)
         }
     }
 }
 
 val exceptionHandler = CoroutineExceptionHandler { context, error ->
-    // Do what you want with the error
     println(error.message)
 }

@@ -1,9 +1,9 @@
 package com.pv.shijo.articles.repositories
 
+import androidx.paging.PagingData
 import com.pv.shijo.entity.Article
-import com.pv.shijo.entity.ArticleResponse
-import com.pv.shijo.entity.Response
+import kotlinx.coroutines.flow.Flow
 
 interface ArticleRepository {
-    suspend fun getArticles(page: Int): ArticleResponse
+    suspend fun getArticles(page: Int): Flow<PagingData<Article>>
 }
