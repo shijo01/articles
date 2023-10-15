@@ -125,7 +125,6 @@ fun LazyStaggeredGridScope.articleList(
 }
 
 
-
 @Preview
 @Preview(device = Devices.TABLET)
 @Composable
