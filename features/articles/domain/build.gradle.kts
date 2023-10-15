@@ -49,6 +49,7 @@ android {
 dependencies {
     implementation(projects.core.entity)
     implementation(libs.bundles.hilt)
+    implementation(libs.androidx.paging)
     kapt(libs.bundles.hitlCompiler)
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -56,9 +57,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-    //TODO
-    val pagingVersion = "3.2.0-alpha06"
-    implementation ("androidx.paging:paging-runtime:$pagingVersion")
-    implementation ("androidx.paging:paging-compose:1.0.0-alpha20")
 }

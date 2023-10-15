@@ -53,6 +53,7 @@ dependencies {
     implementation(projects.features.articles.domain)
     implementation(libs.bundles.retrofit)
     implementation(libs.bundles.hilt)
+    implementation(libs.androidx.paging)
     kapt(libs.bundles.hitlCompiler)
 
     implementation(libs.core.ktx)
@@ -60,7 +61,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
 
-    val pagingVersion = "3.2.0-alpha06"
-    implementation ("androidx.paging:paging-runtime:$pagingVersion")
 
 }

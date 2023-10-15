@@ -61,19 +61,14 @@ dependencies {
     implementation(libs.bundles.material)
     implementation(libs.bundles.coil)
     implementation(libs.bundles.hilt)
+    implementation(libs.androidx.paging)
+    implementation(libs.androidx.paging.compose)
 
     kapt(libs.bundles.hitlCompiler)
-//todo
-    implementation("androidx.compose.material3:material3:1.2.0-alpha09")
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.0-alpha09")
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     // implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-    val pagingVersion = "3.2.0-alpha06"
-    implementation ("androidx.paging:paging-runtime:$pagingVersion")
-    implementation ("androidx.paging:paging-compose:3.3.0-alpha02")
 }
