@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetArticleUseCase @Inject constructor(
     private val articleRepository: ArticleRepository
 ) {
-    suspend operator fun invoke(page: Int = 1): Flow<PagingData<Article>> {
-        return articleRepository.getArticles(page)
+    suspend operator fun invoke(): Flow<PagingData<Article>> {
+        return articleRepository.getArticles()
     }
 }

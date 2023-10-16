@@ -55,6 +55,7 @@ android {
 dependencies {
 
     implementation(projects.core.entity)
+    implementation(projects.core.network)
     implementation(projects.core.theme)
     implementation(projects.features.articles.domain)
     implementation(libs.bundles.compose)
@@ -71,4 +72,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:4.8.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
 }

@@ -4,7 +4,7 @@ package com.pv.shijo.core.network.dto
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
-data class Article(
+data class ArticleDto(
     @SerializedName("articleStatus")
     val articleStatus: String?,
     @SerializedName("author")

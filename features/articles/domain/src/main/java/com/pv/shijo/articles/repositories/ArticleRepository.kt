@@ -5,5 +5,5 @@ import com.pv.shijo.entity.Article
 import kotlinx.coroutines.flow.Flow
 
 interface ArticleRepository {
-    suspend fun getArticles(page: Int): Flow<PagingData<Article>>
+    suspend fun getArticles(): Flow<PagingData<Article>>
 }

@@ -2,6 +2,8 @@ package com.pv.shijo.core.network.di
 
 import androidx.multidex.BuildConfig
 import com.pv.shijo.core.network.ArticleApi
+import com.pv.shijo.core.network.utils.DefaultDispatcherProvider
+import com.pv.shijo.core.network.utils.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,4 +50,9 @@ object NetworkModule {
 
     @Provides
     fun provideArticleApi(retrofit: Retrofit): ArticleApi = retrofit.create(ArticleApi::class.java)
+
+    @Provides
+    fun provideDispatcherProvider(): DispatcherProvider {
+        return DefaultDispatcherProvider()
+    }
 }
