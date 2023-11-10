@@ -1,9 +1,9 @@
-# Implemented features
+#  Features
 ## Article list - Responsive UI (1 item per row in portrait or when display width < 300.dp)
 ## Article Details - Responsive UI
 ## Pagination with Jetpack Pagination Library
 ## UI with Jetpack compose
-## Image caching with Coil Image caching library (not working as image urls not working in API response)
+## Image caching with Coil Image caching library
 ## Api Integration with retrofit
 ## Unit test with Mockito, Turbine and JUnit
 
