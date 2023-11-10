@@ -1,6 +1,4 @@
-Title: Clean MVVM Android Project with Jetpack Compose, Coroutines, and Flow
-
-Description: The "Clean MVVM Android Project" is a comprehensive sample application designed to showcase best practices in Android app development, leveraging the power of the modern Android development stack. This project is built upon the principles of Clean Architecture, employing the Model-View-ViewModel (MVVM) pattern for a clear and maintainable codebase.
+Articles is a comprehensive sample application designed to showcase best practices in Android app development, leveraging the power of the modern Android development stack. This project is built upon the principles of Clean Architecture, employing the Model-View-ViewModel (MVVM) pattern for a clear and maintainable codebase.
 
 Key Technologies and Architectural Components:
 
